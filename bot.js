@@ -16,7 +16,7 @@ const bot = new TelegramBot(TOKEN, {
   }
 });
 
-console.log("🤖 Parena bot started...");
+console.log("🤖 Parena bot started seamlessly...");
 
 // =====================
 // 🟢 START COMMAND
@@ -26,12 +26,13 @@ bot.onText(/\/start/, (msg) => {
 
   bot.sendMessage(
     chatId,
-    "👋 Welcome to Parena!\n\nChoose an option below:",
+    "✨ *Welcome to Parena.*\n\nYour premier destination for competitive tracking and match insights. Please select an option from the menu below to begin your journey.",
     {
+      parse_mode: "Markdown",
       reply_markup: {
         keyboard: [
-          ["📊 Open App", "📈 Leaderboard"],
-          ["🎮 Matches", "ℹ️ Help"]
+          ["📊 Launch App", "📈 Leaderboard"],
+          ["🎮 Live Matches", "ℹ️ Assistance"]
         ],
         resize_keyboard: true
       }
@@ -40,12 +41,13 @@ bot.onText(/\/start/, (msg) => {
 });
 
 // =====================
-// 📊 OPEN APP
+// 📊 LAUNCH APP
 // =====================
-bot.onText(/📊 Open App/, (msg) => {
+bot.onText(/📊 Launch App/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "🚀 Open Parena:\nhttps://dapper-raindrop-532f03.netlify.app"
+    "🚀 *Initializing Parena Mini App...*\n\nPlease use the official application interface to access your dashboard and personalized features.",
+    { parse_mode: "Markdown" }
   );
 });
 
@@ -55,31 +57,35 @@ bot.onText(/📊 Open App/, (msg) => {
 bot.onText(/📈 Leaderboard/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "🏆 Leaderboard is live inside the app.\nOpen Mini App to view rankings."
+    "🏆 *Global Rankings*\n\nThe competitive leaderboard is updated in real-time. You can view the complete player rankings directly inside the Parena dashboard.",
+    { parse_mode: "Markdown" }
   );
 });
 
 // =====================
-// 🎮 MATCHES
+// 🎮 LIVE MATCHES
 // =====================
-bot.onText(/🎮 Matches/, (msg) => {
+bot.onText(/🎮 Live Matches/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "⚽ Matches are available inside the Parena app."
+    "⚽ *Match Center*\n\nAll active schedules, ongoing fixtures, and historical match data are hosted securely within the main platform.",
+    { parse_mode: "Markdown" }
   );
 });
 
 // =====================
-// ℹ️ HELP
+// ℹ️ ASSISTANCE
 // =====================
-bot.onText(/ℹ️ Help/, (msg) => {
+bot.onText(/ℹ️ Assistance/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "ℹ️ Parena Bot Commands:\n\n" +
-      "/start - Start bot\n" +
-      "📊 Open App - Open Mini App\n" +
-      "📈 Leaderboard - View rankings\n" +
-      "🎮 Matches - View matches"
+    "📋 *Directory Guide*\n\n" +
+      "Use the menu buttons below or the quick commands to navigate:\n\n" +
+      "• `/start` — Restart directory services\n" +
+      "• `📊 Launch App` — Access the application\n" +
+      "• `📈 Leaderboard` — Standings & analytics\n" +
+      "• `🎮 Live Matches` — Match dynamic centers",
+    { parse_mode: "Markdown" }
   );
 });
 
@@ -91,13 +97,18 @@ bot.on("message", (msg) => {
 
   const allowed = [
     "/start",
-    "📊 Open App",
+    "📊 Launch App",
     "📈 Leaderboard",
-    "🎮 Matches",
-    "ℹ️ Help"
+    "🎮 Live Matches",
+    "ℹ️ Assistance"
   ];
 
-  if (!allowed.includes(text)) {
-    bot.sendMessage(msg.chat.id, "❓ Unknown command. Type /start");
+  // Safely ignore command text checks if it's undefined
+  if (text && !allowed.includes(text)) {
+    bot.sendMessage(
+      msg.chat.id,
+      "⚡ *Command Not Recognized.*\n\nPlease utilize the menu options below or type `/start` to return to the main interface.",
+      { parse_mode: "Markdown" }
+    );
   }
 });
