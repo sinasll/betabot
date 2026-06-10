@@ -1,14 +1,13 @@
 const TelegramBot = require("node-telegram-bot-api");
 
-// 🔐 Token from Render Environment Variables
+// 🔐 Token from environment
 const TOKEN = process.env.BOT_TOKEN;
 
 if (!TOKEN) {
-  console.error("❌ BOT_TOKEN is missing in environment variables!");
+  console.error("BOT_TOKEN missing");
   process.exit(1);
 }
 
-// ⚡ Render-safe polling config
 const bot = new TelegramBot(TOKEN, {
   polling: {
     interval: 1000,
@@ -16,23 +15,22 @@ const bot = new TelegramBot(TOKEN, {
   }
 });
 
-console.log("🤖 Parena bot started seamlessly...");
+console.log("Parena bot running...");
 
 // =====================
-// 🟢 START COMMAND
+// START
 // =====================
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
 
   bot.sendMessage(
     chatId,
-    "✨ *Welcome to Parena.*\n\nYour premier destination for competitive tracking and match insights. Please select an option from the menu below to begin your journey.",
+    "Welcome to Parena.\nSelect an option below:",
     {
-      parse_mode: "Markdown",
       reply_markup: {
         keyboard: [
-          ["📊 Launch App", "📈 Leaderboard"],
-          ["🎮 Live Matches", "ℹ️ Assistance"]
+          ["Open App", "Leaderboard"],
+          ["Matches", "Help"]
         ],
         resize_keyboard: true
       }
@@ -41,74 +39,60 @@ bot.onText(/\/start/, (msg) => {
 });
 
 // =====================
-// 📊 LAUNCH APP
+// OPEN APP
 // =====================
-bot.onText(/📊 Launch App/, (msg) => {
+bot.onText(/Open App/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "🚀 *Initializing Parena Mini App...*\n\nPlease use the official application interface to access your dashboard and personalized features.",
-    { parse_mode: "Markdown" }
+    "Parena app is ready.\nOpen it from your main menu."
   );
 });
 
 // =====================
-// 📈 LEADERBOARD
+// LEADERBOARD
 // =====================
-bot.onText(/📈 Leaderboard/, (msg) => {
+bot.onText(/Leaderboard/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "🏆 *Global Rankings*\n\nThe competitive leaderboard is updated in real-time. You can view the complete player rankings directly inside the Parena dashboard.",
-    { parse_mode: "Markdown" }
+    "Leaderboard is available inside the app."
   );
 });
 
 // =====================
-// 🎮 LIVE MATCHES
+// MATCHES
 // =====================
-bot.onText(/🎮 Live Matches/, (msg) => {
+bot.onText(/Matches/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "⚽ *Match Center*\n\nAll active schedules, ongoing fixtures, and historical match data are hosted securely within the main platform.",
-    { parse_mode: "Markdown" }
+    "Matches are updated live inside the app."
   );
 });
 
 // =====================
-// ℹ️ ASSISTANCE
+// HELP
 // =====================
-bot.onText(/ℹ️ Assistance/, (msg) => {
+bot.onText(/Help/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "📋 *Directory Guide*\n\n" +
-      "Use the menu buttons below or the quick commands to navigate:\n\n" +
-      "• `/start` — Restart directory services\n" +
-      "• `📊 Launch App` — Access the application\n" +
-      "• `📈 Leaderboard` — Standings & analytics\n" +
-      "• `🎮 Live Matches` — Match dynamic centers",
-    { parse_mode: "Markdown" }
+    "Parena Commands:\n\nOpen App\nLeaderboard\nMatches\nHelp"
   );
 });
 
 // =====================
-// ❓ FALLBACK (SAFE)
+// FALLBACK
 // =====================
 bot.on("message", (msg) => {
   const text = msg.text;
 
   const allowed = [
     "/start",
-    "📊 Launch App",
-    "📈 Leaderboard",
-    "🎮 Live Matches",
-    "ℹ️ Assistance"
+    "Open App",
+    "Leaderboard",
+    "Matches",
+    "Help"
   ];
 
-  // Safely ignore command text checks if it's undefined
-  if (text && !allowed.includes(text)) {
-    bot.sendMessage(
-      msg.chat.id,
-      "⚡ *Command Not Recognized.*\n\nPlease utilize the menu options below or type `/start` to return to the main interface.",
-      { parse_mode: "Markdown" }
-    );
+  if (!allowed.includes(text)) {
+    bot.sendMessage(msg.chat.id, "Unknown command. Use /start");
   }
 });
