@@ -22,6 +22,6 @@ console.log("Parena bot running...");
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "Welcome to Parena.\nYour experience starts here."
+    "Welcome to beta version of PArena.\nClick OPEN to start the app and give us your predictions! 🔥"
   );
 });
