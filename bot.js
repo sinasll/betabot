@@ -16,12 +16,9 @@ const bot = new TelegramBot(TOKEN, {
 
 console.log("Parena bot running...");
 
-// =====================
-// ONLY /START COMMAND
-// =====================
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "Welcome to beta version of PArena.\nClick OPEN to start the app and give us your predictions! 🔥"
+    "بەخێربێیت بۆ پێش، ئەپەکە بکەرەوە و لەگەڵمان پێشبینی بکە! 🔥"
   );
 });
