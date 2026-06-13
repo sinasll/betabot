@@ -19,6 +19,11 @@ console.log("Parena bot running...");
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "بەخێربێیت بۆ پێش، ئەپەکە بکەرەوە و لەگەڵمان پێشبینی بکە! 🔥"
+    "Welcome to PESH! ⚽
+
+Predict FIFA World Cup 2026 match results, challenge your friends, earn points, and climb the leaderboard to prove your football knowledge.
+
+Good luck, and may the best predictor win!
+"
   );
 });
