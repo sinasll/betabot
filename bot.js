@@ -5,17 +5,17 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.send('IMPOSTER bot is running!');
+  res.send('بۆتێ IMPOSTER یێ ساخە! 🚀');
 });
 
 app.listen(PORT, () => {
-  console.log('Server started on port ' + PORT);
+  console.log(`سێرڤەر ل سەر پۆرتێ ${PORT} دەستپێکر`);
 });
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
 if (!BOT_TOKEN) {
-  console.error('ERROR: BOT_TOKEN is missing from environment variables!');
+  console.error('❌ خەلەتی: BOT_TOKEN د ناڤ Environment Variables دا نەیێ هەیە!');
   process.exit(1);
 }
 
@@ -23,18 +23,18 @@ const bot = new Telegraf(BOT_TOKEN);
 
 bot.start((ctx) => {
   ctx.reply(
-    'Welcome to IMPOSTER!\n\n' +
-    'This bot was created for your game.\n\n' +
-    'Tap the button below to play.'
+    'سڵاڤ، بخێر بێی بۆ یارییا فێلباز\n\n' +
+    'یا ب زمانێ کوردی هاتییە دروستکرن\n\n' +
+    'ل خوارێ کلیک بکە ل سەر دوگمەیا "یاریێ بکە"'
   );
 });
 
 bot.launch()
   .then(() => {
-    console.log('IMPOSTER bot started successfully!');
+    console.log('بۆتێ IMPOSTER ب بادینی ل سەر Render دەست ب کار بوو! ✅');
   })
   .catch((err) => {
-    console.error('Bot launch error:', err);
+    console.error('خەلەتی د دەستپێکرنێ دا:', err);
   });
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
