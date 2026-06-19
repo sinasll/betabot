@@ -1,54 +1,41 @@
-```js
 const { Telegraf } = require('telegraf');
 const express = require('express');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Health check
 app.get('/', (req, res) => {
-  res.send('بۆتێ IMPOSTER یێ ساخە! 🚀');
+  res.send('IMPOSTER bot is running!');
 });
 
 app.listen(PORT, () => {
-  console.log(`سێرڤەر ل سەر پۆرتێ ${PORT} دەستپێکر`);
+  console.log('Server started on port ' + PORT);
 });
 
-// Telegram Bot Token
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
 if (!BOT_TOKEN) {
-  console.error('❌ خەلەتی: BOT_TOKEN د Environment Variables دا نەهاتیە دانان!');
+  console.error('ERROR: BOT_TOKEN is missing from environment variables!');
   process.exit(1);
 }
 
-// Create bot
 const bot = new Telegraf(BOT_TOKEN);
 
-// Start command
 bot.start((ctx) => {
-  ctx.reply(`سڵاڤ، بخێر بێی بۆ یارییا فێلباز
-
-یا ب زمانێ کوردی هاتییە دروستکرن
-
-ل خوارێ کلیک بکە ل سەر دوگمەیا "یاریێ بکە"`);
+  ctx.reply(
+    'Welcome to IMPOSTER!\n\n' +
+    'This bot was created for your game.\n\n' +
+    'Tap the button below to play.'
+  );
 });
 
-// Launch bot
 bot.launch()
   .then(() => {
-    console.log('بۆتێ IMPOSTER ب سەرکەفتی دەست ب کار بوو! ✅');
+    console.log('IMPOSTER bot started successfully!');
   })
   .catch((err) => {
-    console.error('خەلەتی د دەستپێکرنا بۆتێ دا:', err);
+    console.error('Bot launch error:', err);
   });
 
-// Graceful shutdown
-process.once('SIGINT', () => {
-  bot.stop('SIGINT');
-});
-
-process.once('SIGTERM', () => {
-  bot.stop('SIGTERM');
-});
-```
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
