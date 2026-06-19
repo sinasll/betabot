@@ -1,9 +1,11 @@
+```js
 const { Telegraf } = require('telegraf');
 const express = require('express');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Health check
 app.get('/', (req, res) => {
   res.send('بۆتێ IMPOSTER یێ ساخە! 🚀');
 });
@@ -12,31 +14,41 @@ app.listen(PORT, () => {
   console.log(`سێرڤەر ل سەر پۆرتێ ${PORT} دەستپێکر`);
 });
 
+// Telegram Bot Token
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
 if (!BOT_TOKEN) {
-  console.error('❌ خەلەتی: BOT_TOKEN د ناڤ Environment Variables دا نەیێ هەیە!');
+  console.error('❌ خەلەتی: BOT_TOKEN د Environment Variables دا نەهاتیە دانان!');
   process.exit(1);
 }
 
+// Create bot
 const bot = new Telegraf(BOT_TOKEN);
 
-// ٣. تەنێ بەرسڤدانا فرمانا /start ب زمانێ بادینییا دهۆکێ
+// Start command
 bot.start((ctx) => {
-  ctx.reply(
-    'سڵاڤ، بخێر بێی بۆ یارییا فێلباز\n\n' +
-    'یا ب زمانێ کوردی هاتییە دروستکرن\n\n' +
-    'بکە (ل خوارێ کلیکێ ل سەر دوگمەیا (یاریێ بکە\n' +
-  );
+  ctx.reply(`سڵاڤ، بخێر بێی بۆ یارییا فێلباز
+
+یا ب زمانێ کوردی هاتییە دروستکرن
+
+ل خوارێ کلیک بکە ل سەر دوگمەیا "یاریێ بکە"`);
 });
 
+// Launch bot
 bot.launch()
   .then(() => {
-    console.log('بۆتێ IMPOSTER ب بادینی ل سەر Render دەست ب کار بوو! ✅');
+    console.log('بۆتێ IMPOSTER ب سەرکەفتی دەست ب کار بوو! ✅');
   })
   .catch((err) => {
-    console.error('خەلەتی د دەستپێکرنێ دا:', err);
+    console.error('خەلەتی د دەستپێکرنا بۆتێ دا:', err);
   });
 
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
+// Graceful shutdown
+process.once('SIGINT', () => {
+  bot.stop('SIGINT');
+});
+
+process.once('SIGTERM', () => {
+  bot.stop('SIGTERM');
+});
+```
