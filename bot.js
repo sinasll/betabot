@@ -1,56 +1,41 @@
-const TelegramBot = require("node-telegram-bot-api");
+const { Telegraf } = require('telegraf');
 
-const TOKEN = process.env.BOT_TOKEN;
+// لێرە توکێنا بۆتێ خوە ژ @BotFather وەرگرە
+const bot = new Telegraf('YOUR_TELEGRAM_BOT_TOKEN');
 
-if (!TOKEN) {
-  console.error("❌ BOT_TOKEN is missing");
-  process.exit(1);
-}
-
-const bot = new TelegramBot(TOKEN, {
-  polling: {
-    interval: 1000,
-    autoStart: true,
-  },
+// سڵاڤکرن و دەستپێک
+bot.start((ctx) => {
+    ctx.reply('سڵاڤ! بخێر بێن بۆ یارییا IMPOSTER.\n' +
+              'دێ چەوا یاریێ کەی؟\n' +
+              '/start - دەستپێکرنا یاریێ\n' +
+              '/help - چەوانیا یاریێ\n' +
+              '/score - ڕێزبەندییا خالان');
 });
 
-console.log("✅ PESH bot is running...");
-
-function getWelcomeMessage(firstName = "there") {
-  return `Welcome to PESH, ${firstName}! ⚽
-
-Predict FIFA World Cup 2026 match results, challenge your friends, earn points, and climb the leaderboard.
-
-Good luck, and may the best predictor win!`;
-}
-
-bot.onText(/^\/start(?:\s|$)/i, async (msg) => {
-  const chatId = msg.chat.id;
-  const firstName = msg.from?.first_name || "there";
-
-  try {
-    await bot.sendMessage(chatId, getWelcomeMessage(firstName), {
-      disable_web_page_preview: true,
-    });
-  } catch (error) {
-    console.error("❌ Failed to send welcome message:", error);
-  }
+// چەوانیا یاریێ
+bot.command('help', (ctx) => {
+    ctx.reply('یاسا سادەنە:\n' +
+              '١. هەر کەسەک دێ پەیڤەکێ وەرگریت، ژبلی فێلبازی.\n' +
+              '٢. ب نۆرە وەسف بکەن.\n' +
+              '٣. فێلباز دێ هەول دەت خۆ ڤەشێریت.\n' +
+              '٤. د کۆتاییێ دا دەنگ بدەن بۆ فێلبازی!');
 });
 
-bot.onText(/^\/help(?:\s|$)/i, async (msg) => {
-  try {
-    await bot.sendMessage(
-      msg.chat.id,
-      "Use /start to open the welcome message and begin predicting matches."
-    );
-  } catch (error) {
-    console.error("❌ Failed to send help message:", error);
-  }
+// وەرگرتنا ئاستێ خالان
+bot.command('score', (ctx) => {
+    // لێرە دێ شیای خالێن د Store.js دا هەیین بخوینی
+    ctx.reply('هێشتا چ خال نینن، یاریێ دەستپێبکە داکو ناڤێ تە بچیتە د لیستێ دا!');
 });
 
-bot.on("polling_error", (error) => {
-  console.error("❌ Polling error:", error.message);
+// وەرگرتنا فرمانێن یاریێ
+bot.command('play', (ctx) => {
+    ctx.reply('یاری دهێتە ئامادەکرن... ئەرێ تو دگەل ستافێ دهۆکێ یە؟');
 });
 
-process.on("SIGINT", () => bot.stopPolling());
-process.on("SIGTERM", () => bot.stopPolling());
+bot.launch();
+
+// بۆ راوەستاندنا بۆتی ب سەلامەتی
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
+
+console.log('بۆتێ IMPOSTER ب بادینی دەستپێکر...');
